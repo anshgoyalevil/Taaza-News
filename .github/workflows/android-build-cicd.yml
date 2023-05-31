@@ -1,0 +1,31 @@
+name: Build Release APK
+
+on:
+  push:
+    branches:
+      - master  # Replace with your main branch name
+  pull_request:
+    branches:
+      - master  # Replace with your main branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: 11  # Replace with your desired Java version
+
+    - name: Build with Gradle
+      run: ./gradlew assembleRelease
+
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release
+        path: app/build/outputs/apk/release/app-release.apk
