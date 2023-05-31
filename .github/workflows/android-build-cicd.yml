@@ -22,10 +22,15 @@ jobs:
         java-version: 11  # Replace with your desired Java version
         distribution: 'adopt'  # Replace with your desired Java distribution
 
-    - name: Set up Android SDK
-      uses: actions/setup-android@v2
-      with:
-        sdk-platform: '30'  # Replace with the desired SDK platform version
+    - name: Download and extract Android SDK Command-line Tools
+      run: |
+        curl -s https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip -o android-sdk.zip
+        unzip -qq android-sdk.zip -d $HOME/android-sdk
+
+    - name: Set up environment variables
+      run: |
+        echo 'export ANDROID_SDK_ROOT=$HOME/android-sdk' >> $GITHUB_ENV
+        echo 'export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools' >> $GITHUB_ENV
 
     - name: Grant execute permission to Gradle wrapper
       run: chmod +x ./gradlew
